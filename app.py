@@ -1,10 +1,8 @@
 import streamlit as st
 import pandas as pd
 
-# CONFIGURAÇÃO DA PÁGINA (Interface limpa e profissional)
 st.set_page_config(page_title="SmartGym AI", page_icon="🏋️‍♂️", layout="centered")
 
-# --- ESTILIZAÇÃO CSS CUSTOMIZADA (Visual Premium / Dark Mode Fitness) ---
 st.markdown("""
     <style>
     /* Estilo global de fontes e fundos */
@@ -53,11 +51,9 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# CABEÇALHO DO APLICATIVO
 st.markdown('<div class="main-title">🏋️‍♂️ SmartGym AI</div>', unsafe_allow_html=True)
 st.markdown('<div class="sub-title">Inteligência Artificial para Prescrição de Treinos e Retenção de Alunos</div>', unsafe_allow_html=True)
 
-# --- SIDEBAR: ENTRADA DE DADOS ---
 st.sidebar.markdown("### 📝 Dados do Membro")
 nome = st.sidebar.text_input("Nome do Aluno", "João Silva")
 idade = st.sidebar.slider("Idade", 16, 90, 30)
@@ -71,11 +67,8 @@ objetivo = st.sidebar.selectbox(
 frequencia_semanal = st.sidebar.slider("Frequência Semanal (Dias)", 1, 7, 3)
 nivel_fadiga = st.sidebar.slider("Nível de Fadiga Atual (1=Baixo, 5=Alto)", 1, 5, 2)
 
-# --- FLUXO PRINCIPAL ---
-# Criamos duas abas para separar a análise gráfica das tabelas de exercícios
 aba_analise, aba_treino = st.tabs(["📊 Análise de Risco & Churn", "💪 Prescrição de Treino"])
 
-# 1. CÁCULO DE LOGICA DE NEGÓCIO (Independente da Aba)
 score_risco = 0
 if frequencia_semanal <= 2: score_risco += 40
 elif frequencia_semanal == 3: score_risco += 20
@@ -85,12 +78,10 @@ if idade < 21 or idade > 60: score_risco += 10
 
 porcentagem_risco = min(max(score_risco, 5), 95)
 
-# --- CONTEÚDO DA ABA 1: ANÁLISE DE RISCO ---
 with aba_analise:
     st.markdown(f"### Relatório de Retenção: **{nome}**")
     st.write("Métricas calculadas em tempo real com base no padrão comportamental e de frequência.")
     
-    # Grid de Indicadores Visuais
     col1, col2 = st.columns(2)
     with col1:
         st.metric(label="Frequência Alvo", value=f"{frequencia_semanal}x / semana")
@@ -99,10 +90,8 @@ with aba_analise:
     
     st.markdown("#### Probabilidade de Evasão (Risco de Churn)")
     
-    # Barra de progresso nativa do Streamlit
-    st.progress(porcentagem_risco / 100)
-    
-    # Badge Dinâmico Customizado via HTML/CSS
+    st.progress(porcentagem_risco / 100)    
+
     if porcentagem_risco >= 60:
         st.markdown(f'<div class="status-badge badge-high">⚠️ ALTO RISCO DE EVASÃO: {porcentagem_risco}%</div>', unsafe_allow_html=True)
         st.error("💡 **Ação recomendada**: Entre em contato imediatamente com o aluno para ajustar o plano de horários ou oferecer suporte motivacional.")
@@ -113,11 +102,9 @@ with aba_analise:
         st.markdown(f'<div class="status-badge badge-low">🟢 ALUNO RETIDO COM SUCESSO: {porcentagem_risco}%</div>', unsafe_allow_html=True)
         st.success("💡 **Ação recomendada**: Aluno altamente engajado. Mantenha o acompanhamento padrão e parabenize a consistência.")
 
-# --- CONTEÚDO DA ABA 2: PRESCRIÇÃO DE TREINO ---
 with aba_treino:
     st.markdown(f"### Ficha de Treino Automatizada para **{nome}**")
     
-    # Determinação do treino com base na fadiga e objetivo
     if nivel_fadiga >= 4:
         tipo_treino = "Treino Regenerativo e Mobilidade"
         ajuste_fadiga = "⚠️ **Adaptação Ativada:** Volume reduzido devido à alta fadiga reportada."
@@ -158,7 +145,6 @@ with aba_treino:
     st.caption(ajuste_fadiga)
     st.markdown("---")
     
-    # Gerando os Cards de Exercício dinamicamente usando CSS customizado
     for ex in exercicios:
         st.markdown(f"""
             <div class="exercise-card">
@@ -167,6 +153,5 @@ with aba_treino:
             </div>
         """, unsafe_allow_html=True)
 
-# RODAPÉ DO APP
 st.markdown("---")
 st.markdown('<div style="text-align: center; color: #64748B; font-size: 12px;">SmartGym AI © 2026 - Desenvolvido por Thiago Ramires. Plataforma em conformidade com as diretrizes de ética em dados.</div>', unsafe_allow_html=True)
