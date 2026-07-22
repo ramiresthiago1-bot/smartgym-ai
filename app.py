@@ -110,7 +110,7 @@ with aba_historico:
     st.markdown("### 📋 Alunos Cadastrados na Nuvem (PostgreSQL)")
     if st.button("🔄 Atualizar Lista da Nuvem"):
         try:
-            resposta = supabase.table("alunos_smartgym").select("*").order("id", descending=True).execute()
+            resposta = supabase.table("alunos_smartgym").select("*").order("id", desc=True).execute()
             if resposta.data:
                 df = pd.DataFrame(resposta.data)
                 df.columns = ['ID', 'Nome', 'Idade', 'Peso (kg)', 'Objetivo', 'Dias/Semana', 'Fadiga', 'Risco Churn (%)', 'Data do Cadastro']
