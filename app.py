@@ -17,11 +17,12 @@ except Exception as e:
     st.error("Erro ao conectar ao banco de dados na nuvem.")
 
 class Aluno:
-    def __init__(self, nome, idade, peso, sexo, objetivo, frequencia_semanal, nivel_fadiga):
+    def __init__(self, nome, idade, peso, sexo, nivel, objetivo, frequencia_semanal, nivel_fadiga):
         self.nome = nome
         self.idade = idade
         self.peso = peso
-        self.sexo = sexo 
+        self.sexo = sexo
+        self.nivel = nivel
         self.objetivo = objetivo
         self.frequencia_semanal = frequencia_semanal
         self.nivel_fadiga = nivel_fadiga
@@ -38,36 +39,39 @@ class Aluno:
     def gerar_plano_treino(self):
         if self.nivel_fadiga >= 4:
             return {
-                "tipo": "Treino Regenerativo e Mobilidade",
-                "ajuste": "⚠️ **Volume Reduzido:** Foco em recuperação muscular geral.",
-                "exercicios": ["Esteira (Caminhada Leve) - 15 min", "Alongamento Dinâmico - 3x45s", "Leg Press 45° (Leve) - 3x12"]
+                "tipo": f"Regenerativo e Mobilidade ({self.nivel})",
+                "ajuste": "⚠️ **Volume Reduzido:** Foco em recuperação articular e muscular geral.",
+                "exercicios": ["Esteira (Caminhada Leve) - 15 min", "Alongamento Dinâmico Geral - 3x45s", "Mobilidade de Quadril e Tornozelos"]
             }
         
         if self.objetivo == "Hipertrofia (Ganho de Massa)":
             if self.sexo == "Masculino":
-                return {
-                    "tipo": "Hipertrofia - Foco em Membros Superiores (Masculino)",
-                    "ajuste": "⚡ **Performance:** Estímulo focado em braços, peito e costas.",
-                    "exercicios": ["Supino Reto com Barra - 4x10", "Remada Curvada - 4x10", "Desenvolvimento Halteres - 3x12", "Agachamento Livre - 4x8"]
-                }
+                if self.nivel == "Iniciante":
+                    return {"tipo": "Hipertrofia Masculina - Adaptação Anatomica", "ajuste": "🌱 Foco em aprender a execução e consistência.", "exercicios": ["Supino na Máquina - 3x12", "Puxada Alta - 3x12", "Leg Press 45° - 3x10", "Rosca Direta com Halteres - 3x12"]}
+                elif self.nivel == "Intermediário":
+                    return {"tipo": "Hipertrofia Masculina - ABC Intermediário", "ajuste": "⚡ Foco em progressão moderada de carga.", "exercicios": ["Supino Reto com Barra - 4x10", "Remada Curvada - 4x10", "Desenvolvimento Halteres - 3x12", "Agachamento Livre - 4x8"]}
+                else:
+                    return {"tipo": "Hipertrofia Masculina - Avançado (GVT/FST-7)", "ajuste": "🔥 Alta intensidade, técnicas avançadas e drop-sets.", "exercicios": ["Supino Inclinado com Halteres + Crucifixo - 4x8+10", "Remada Cavalinho (Drop-set na última) - 4x10", "Agachamento Livre com Barra (Carga Máxima) - 4x6", "Rosca 21 na Barra W - 3x"]}
             else:
-                return {
-                    "tipo": "Hipertrofia - Foco em Membros Inferiores (Feminino)",
-                    "ajuste": "⚡ **Performance:** Estímulo focado em quadríceps, glúteos e posterior.",
-                    "exercicios": ["Agachamento Livre - 4x10", "Elevação Pélvica na Máquina - 4x12", "Cadeira Extensora - 3x15", "Puxada Alta (Costas) - 3x10"]
-                }
+                if self.nivel == "Iniciante":
+                    return {"tipo": "Hipertrofia Feminina - Adaptação Geral", "ajuste": "🌱 Foco em ativação muscular básica.", "exercicios": ["Cadeira Extensora - 3x12", "Cadeira Flexora - 3x12", "Puxada Alta - 3x12", "Agachamento com Peso Corporal - 3x15"]}
+                elif self.nivel == "Intermediário":
+                    return {"tipo": "Hipertrofia Feminina - Foco Inferiores", "ajuste": "⚡ Foco em volume e desenho muscular.", "exercicios": ["Agachamento Livre - 4x10", "Elevação Pélvica - 4x12", "Leg Press Horizonal - 3x12", "Stiff com Halteres - 4x10"]}
+                else:
+                    return {"tipo": "Hipertrofia Feminina - Avançado (Membros Inferiores)", "ajuste": "🔥 Estímulo tensional máximo e falha concêntrica.", "exercicios": ["Agachamento Livre com Barra - 4x6 (Pesado)", "Elevação Pélvica (Rest-Pause) - 4x10", "Cadeira Extensora (Isometria de 3s no topo) - 3x10", "Afundo Reverso no Smith - 4x8"]}
                 
         elif self.objetivo == "Emagrecimento":
-            return {
-                "tipo": "Circuito Cardiorrespiratório Integrado",
-                "ajuste": "⚡ **Alta Intensidade:** Queima calórica otimizada.",
-                "exercicios": ["Corrida Intervalada - 15 min", "Afundo com Halteres - 3x15", "Flexão ou Prancha - 3x45s"]
-            }
-            
+            if self.nivel == "Iniciante":
+                return {"tipo": "Cardio Adaptativo", "ajuste": "🌱 Ritmo constante e sem impacto severo.", "exercicios": ["Caminhada na Esteira Inclinada - 20 min", "Bicicleta Ergométrica - 15 min", "Abdominal Infra - 3x15"]}
+            elif self.nivel == "Intermediário":
+                return {"tipo": "Circuito Funcional Metábolico", "ajuste": "⚡ Alternando exercícios de força e cardio.", "exercicios": ["HIIT na Bicicleta - 15 min (30s forte/30s leve)", "Agachamento Sumô + Polichinelos - 3x15", "Flexão de Braço + Prancha - 3x45s"]}
+            else: 
+                return {"tipo": "Protocolo Tabata / Cross-Training", "ajuste": "🔥 Intensidade máxima e zonas de queima de gordura elevadas.", "exercicios": ["Corrida na Esteira (HIIT Máximo) - 15 min", "Burpees Completos - 4x12", "Agachamento Salto (Jump Squat) - 4x20", "Abdominal Remador - 4x25"]}
+
         return {
-            "tipo": "Treino Geral de Condicionamento",
-            "ajuste": "⚡ Manutenção de saúde e resistência.",
-            "exercicios": ["Bicicleta - 10 min", "Agachamento Sumô - 3x15", "Puxada na Polia - 3x12"]
+            "tipo": f"Condicionamento Físico Geral ({self.nivel})",
+            "ajuste": "⚡ Equilíbrio, saúde e bem-estar geral.",
+            "exercicios": ["Caminhada/Corrida Leve - 15 min", "Agachamento Livre - 3x12", "Remada Sentada na Polia - 3x12", "Prancha Isométrica - 3x30s"]
         }
 
 st.markdown("""
@@ -79,7 +83,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.markdown('<div class="main-title">🏋️‍♂️ SmartGym AI Cloud</div>', unsafe_allow_html=True)
-st.markdown('<div class="sub-title">Prescrição Inteligente Segmentada por Gênero e Objetivo</div>', unsafe_allow_html=True)
+st.markdown('<div class="sub-title">Prescrição Ultra Inteligente por Gênero, Objetivo e Experiência</div>', unsafe_allow_html=True)
 
 st.sidebar.markdown("### 📝 Cadastro do Membro")
 nome_input = st.sidebar.text_input("Nome do Aluno", "João Silva")
@@ -87,6 +91,8 @@ idade_input = st.sidebar.slider("Idade", 16, 90, 30)
 peso_input = st.sidebar.number_input("Peso Atual (kg)", min_value=40.0, max_value=200.0, value=75.0)
 
 sexo_input = st.sidebar.radio("Sexo Biológico", ["Masculino", "Feminino"])
+
+nivel_input = st.sidebar.selectbox("Nível de Experiência", ["Iniciante", "Intermediário", "Avançado"])
 
 objetivo_input = st.sidebar.selectbox("Objetivo Principal", ["Hipertrofia (Ganho de Massa)", "Emagrecimento", "Saúde/Qualidade de Vida"])
 frequencia_input = st.sidebar.slider("Frequência Semanal (Dias)", 1, 7, 3)
@@ -96,7 +102,7 @@ aba_cadastro, aba_historico = st.tabs(["📝 Avaliar Aluno", "🗂️ Histórico
 
 with aba_cadastro:
     if st.sidebar.button("💾 Analisar e Salvar na Nuvem"):
-        aluno_atual = Aluno(nome_input, idade_input, peso_input, sexo_input, objetivo_input, frequencia_input, fadiga_input)
+        aluno_atual = Aluno(nome_input, idade_input, peso_input, sexo_input, nivel_input, objetivo_input, frequencia_input, fadiga_input)
         risco = aluno_atual.calcular_risco_evasao()
         treino = aluno_atual.gerar_plano_treino()
         
@@ -105,6 +111,7 @@ with aba_cadastro:
             "idade": aluno_atual.idade,
             "peso": aluno_atual.peso,
             "sexo": aluno_atual.sexo,
+            "nivel": aluno_atual.nivel,
             "objetivo": aluno_atual.objetivo,
             "frequencia": aluno_atual.frequencia_semanal,
             "fadiga": aluno_atual.nivel_fadiga,
@@ -114,17 +121,20 @@ with aba_cadastro:
         try:
             supabase.table("alunos_smartgym").insert(dados_aluno).execute()
             st.success(f"🎉 Sucesso! Os dados de {aluno_atual.nome} foram salvos com segurança na nuvem.")
-        except Exception as error:
+        except:
             try:
-                del dados_aluno["sexo"]
+                if "nivel" in dados_aluno: del dados_aluno["nivel"]
+                if "sexo" in dados_aluno: del dados_aluno["sexo"]
                 supabase.table("alunos_smartgym").insert(dados_aluno).execute()
-                st.success(f"🎉 Salvo na nuvem (sem coluna sexo).")
-            except:
+                st.success(f"🎉 Salvo na nuvem!")
+            except Exception as error:
                 st.error(f"Erro no banco: {error}")
             
-        st.markdown(f"### Plano de Treino para: **{aluno_atual.nome}** ({aluno_atual.sexo})")
-        st.write(f"Risco de Desistência calculado: **{risco}%**")
-        st.write(f"**Treino Recomendado:** {treino['tipo']}")
+        st.markdown(f"### Plano de Treino para: **{aluno_atual.nome}**")
+        st.write(f"Perfil: **{aluno_atual.sexo} | {aluno_atual.nivel} | Risco de Churn: {risco}%**")
+        st.write(f"🎯 **Treino Recomendado:** {treino['tipo']}")
+        st.caption(treino['ajuste'])
+        st.markdown("---")
         for ex in treino['exercicios']:
             st.markdown(f'<div class="exercise-card">🔹 {ex}</div>', unsafe_allow_html=True)
     else:
@@ -142,12 +152,4 @@ with aba_historico:
                 st.warning("Nenhum aluno cadastrado ainda.")
         except Exception as error:
             st.error(f"Erro ao buscar histórico: {error}")
-st.markdown("---")
-st.markdown("""
-    <div style="text-align: center; color: #64748B; font-size: 14px; font-weight: 500; margin-top: 20px;">
-        🚀 SmartGym AI Cloud v3.0 | Desenvolvido com ❤️ por 
-        <a href="https://github.com" target="_blank" style="color: #CCFF00; text-decoration: none; font-weight: bold;">
-            Thiago Ramires
-        </a>
-    </div>
-""", unsafe_allow_html=True)
+
